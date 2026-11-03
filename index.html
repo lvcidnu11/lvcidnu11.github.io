@@ -1,408 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shucheng Gong | Hardware & IC Design</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shucheng Gong</title>
+<meta name="description" content="Shucheng Gong — Engineering Science (ECE) at the University of Toronto. Mixed-signal circuits, neural-interface hardware, and computer architecture." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --surface: #ffffff;
+    --fg: #16191d;
+    --muted: #5b6470;
+    --faint: #8a929c;
+    --border: #e1e3df;
+    --accent: #1f7a4d;
+    --accent-soft: rgba(31, 122, 77, 0.10);
+    --grid-off: #dfe3dc;
+    --grid-on: #1f7a4d;
+    --serif: "Source Serif 4", Georgia, serif;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1113;
+      --surface: #151a1d;
+      --fg: #e6e8e6;
+      --muted: #a0a8b0;
+      --faint: #6d7680;
+      --border: #252c31;
+      --accent: #5cc58e;
+      --accent-soft: rgba(92, 197, 142, 0.12);
+      --grid-off: #222a2e;
+      --grid-on: #5cc58e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1113;
+    --surface: #151a1d;
+    --fg: #e6e8e6;
+    --muted: #a0a8b0;
+    --faint: #6d7680;
+    --border: #252c31;
+    --accent: #5cc58e;
+    --accent-soft: rgba(92, 197, 142, 0.12);
+    --grid-off: #222a2e;
+    --grid-on: #5cc58e;
+  }
 
-    <style>
-        /* ---------- 颜色变量：默认按“浅色”来定义 ---------- */
-        :root {
-            --bg: #f5f5f6;
-            --fg: #111827;
-            --muted: #4b5563;
-            --surface: #ffffff;
-            --border: #d1d5db;
-            --accent: #16a34a;   /* 硬件风一点的绿色 */
-            --accent-soft: rgba(22, 163, 74, 0.12);
-            --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
-            --mono: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            --radius: 14px;
-        }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.6 var(--sans);
+  }
+  a { color: inherit; text-decoration-color: var(--faint); text-underline-offset: 3px; }
+  a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
 
-        /* ---------- 如果系统是暗色，就整体换成暗色 ---------- */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #020617;
-                --fg: #e5e7eb;
-                --muted: #9ca3af;
-                --surface: #020617;
-                --border: #1f2937;
-                --accent: #4ade80;
-                --accent-soft: rgba(74, 222, 128, 0.08);
-                --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.7);
-            }
-        }
+  /* ---------- top bar ---------- */
+  .bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0; font: 500 13px var(--mono); color: var(--muted);
+  }
+  .bar nav { display: flex; gap: 18px; flex-wrap: wrap; }
+  .bar nav a { text-decoration: none; }
+  .theme-btn {
+    font: inherit; color: inherit; background: none; cursor: pointer;
+    border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* ---------- 手动强制浅色 / 深色（覆盖系统） ---------- */
-        :root[data-theme="light"] {
-            --bg: #f5f5f6;
-            --fg: #111827;
-            --muted: #4b5563;
-            --surface: #ffffff;
-            --border: #d1d5db;
-            --accent: #16a34a;
-            --accent-soft: rgba(22, 163, 74, 0.12);
-            --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
-        }
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+    padding: 48px 0 40px; border-bottom: 1px solid var(--border);
+  }
+  h1 {
+    font: 600 clamp(40px, 7vw, 60px)/1.05 var(--serif);
+    letter-spacing: -0.02em; margin: 0 0 16px;
+  }
+  .lede { font-size: 18px; color: var(--muted); max-width: 34em; margin: 0 0 22px; }
+  .lede strong { color: var(--fg); font-weight: 500; }
+  .links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 500 13px var(--mono); text-decoration: none;
+    padding: 7px 13px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface);
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .chip.primary:hover { color: var(--bg); opacity: 0.9; }
 
-        :root[data-theme="dark"] {
-            --bg: #020617;
-            --fg: #e5e7eb;
-            --muted: #9ca3af;
-            --surface: #020617;
-            --border: #1f2937;
-            --accent: #4ade80;
-            --accent-soft: rgba(74, 222, 128, 0.08);
-            --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.7);
-        }
+  /* 8x8 systolic array: a diagonal wavefront sweeps through, as operands do */
+  .array { display: grid; grid-template-columns: repeat(8, 14px); gap: 5px; }
+  .array span {
+    width: 14px; height: 14px; border-radius: 3px; background: var(--grid-off);
+    animation: wave 3.2s ease-in-out infinite;
+    animation-delay: calc(var(--d) * 0.12s);
+  }
+  @keyframes wave {
+    0%, 30%, 100% { background: var(--grid-off); }
+    12% { background: var(--grid-on); }
+  }
+  @media (prefers-reduced-motion: reduce) { .array span { animation: none; } }
+  .array-cap { font: 12px var(--mono); color: var(--faint); margin-top: 10px; text-align: center; }
 
-        /* ---------- 基础布局 ---------- */
-        * {
-            box-sizing: border-box;
-        }
+  /* ---------- facts strip ---------- */
+  .facts {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--border); border-bottom: 1px solid var(--border);
+  }
+  .fact { background: var(--bg); padding: 20px 20px 20px 0; }
+  .fact + .fact { padding-left: 20px; }
+  .fact b { display: block; font: 500 12px var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .fact span { font-size: 15px; }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: radial-gradient(circle at top, rgba(148, 163, 184, 0.25), transparent 55%),
-                        var(--bg);
-            color: var(--fg);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-        }
+  /* ---------- sections ---------- */
+  section { padding: 56px 0 8px; }
+  h2 {
+    font: 500 13px var(--mono); text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin: 0 0 24px; display: flex; align-items: center; gap: 12px;
+  }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  h3 { font-size: 18px; font-weight: 600; margin: 0; line-height: 1.35; }
+  p { margin: 0 0 12px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
 
-        .shell {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 32px 16px 64px;
-        }
+  /* ---------- timeline entries ---------- */
+  .entry { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 18px 0; }
+  .entry + .entry { border-top: 1px dashed var(--border); }
+  .when { font: 13px/1.6 var(--mono); color: var(--faint); padding-top: 2px; }
+  .role { color: var(--muted); font-size: 15px; margin: 2px 0 10px; }
+  ul.tight { margin: 0; padding-left: 18px; }
+  ul.tight li { margin: 4px 0; font-size: 15px; }
+  ul.tight li::marker { color: var(--accent); }
 
-        header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 24px 24px 20px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            background: color-mix(in srgb, var(--surface) 88%, transparent);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(16px);
-        }
+  .pub {
+    padding: 20px 22px; border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0; background: var(--surface); margin-bottom: 14px;
+  }
+  .pub .venue { font: 500 12px var(--mono); color: var(--accent); letter-spacing: 0.04em; }
+  .pub h3 { margin: 6px 0 8px; font-family: var(--serif); font-size: 19px; }
+  .pub .authors { font-size: 14px; color: var(--muted); }
+  .pub .authors b { color: var(--fg); font-weight: 600; }
 
-        .id-block {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+  /* ---------- project cards ---------- */
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px; transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card.wide { grid-column: span 2; }
+  .tag { font: 500 11.5px var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .card h3 a { text-decoration: none; }
+  .card p { font-size: 15px; color: var(--muted); margin: 8px 0 14px; }
+  .metrics { display: flex; gap: 22px; flex-wrap: wrap; margin: 4px 0 16px; }
+  .metric b { display: block; font: 500 22px/1.2 var(--mono); color: var(--fg); letter-spacing: -0.02em; }
+  .metric span { font-size: 12.5px; color: var(--faint); }
+  .stack { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+  .stack span { font: 11.5px var(--mono); color: var(--muted); background: var(--accent-soft); padding: 3px 8px; border-radius: 5px; }
+  .note { font-size: 12.5px; color: var(--faint); margin: -6px 0 14px; }
+  .card img { width: 100%; border-radius: 8px; border: 1px solid var(--border); background: #fff; margin: 4px 0 14px; }
+  .card.wide .split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: start; }
 
-        h1 {
-            margin: 0;
-            font-size: 2.4rem;
-            letter-spacing: 0.02em;
-        }
+  /* ---------- skills ---------- */
+  .skills { display: grid; grid-template-columns: 170px 1fr; gap: 10px 24px; font-size: 15px; }
+  .skills dt { font: 500 13px/1.7 var(--mono); color: var(--muted); }
+  .skills dd { margin: 0; }
 
-        .tagline {
-            margin: 0;
-            font-size: 0.95rem;
-            color: var(--muted);
-        }
+  footer {
+    margin-top: 64px; padding: 28px 0 40px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font: 13px var(--mono); color: var(--faint);
+  }
 
-        .meta-line {
-            margin-top: 6px;
-            font-family: var(--mono);
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--muted);
-        }
-
-        .theme-toggle {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: rgba(15, 23, 42, 0.02);
-            color: var(--muted);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-        }
-
-        .theme-toggle:hover {
-            background: var(--accent-soft);
-            border-color: var(--accent);
-            transform: translateY(-1px);
-        }
-
-        .theme-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: var(--accent);
-        }
-
-        main {
-            margin-top: 32px;
-            display: grid;
-            grid-template-columns: minmax(0, 3fr);
-            gap: 24px;
-        }
-
-        section {
-            padding: 20px 22px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            background: color-mix(in srgb, var(--surface) 94%, transparent);
-        }
-
-        section h2 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-family: var(--mono);
-            color: var(--muted);
-        }
-
-        a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .pill {
-            padding: 4px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            font-size: 0.78rem;
-            font-family: var(--mono);
-            color: var(--muted);
-        }
-
-        .pill--accent {
-            border-color: var(--accent);
-            background: var(--accent-soft);
-            color: var(--fg);
-        }
-
-        /* ---------- 项目卡片 + hover ---------- */
-        .project-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .project-card {
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            padding: 10px 12px;
-            background: color-mix(in srgb, var(--surface) 96%, transparent);
-            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-        }
-
-        .project-title {
-            font-size: 0.98rem;
-            font-weight: 500;
-        }
-
-        .project-meta {
-            font-size: 0.78rem;
-            font-family: var(--mono);
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
-        .project-desc {
-            font-size: 0.9rem;
-            margin-top: 4px;
-            color: var(--muted);
-        }
-
-        .project-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow-soft);
-            background: var(--accent-soft);
-        }
-
-        /* ---------- 联系方式 ---------- */
-        .link-list {
-            list-style: none;
-            padding: 0;
-            margin: 6px 0 0;
-        }
-
-        .link-list li {
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        footer {
-            margin-top: 28px;
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-align: right;
-            font-family: var(--mono);
-        }
-
-        @media (max-width: 640px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; padding-top: 24px; gap: 28px; }
+    .array-box { display: none; }
+    .facts { grid-template-columns: 1fr; }
+    .fact, .fact + .fact { padding: 14px 0; }
+    .entry { grid-template-columns: 1fr; gap: 4px; }
+    .projects { grid-template-columns: 1fr; }
+    .card.wide { grid-column: auto; }
+    .card.wide .split { grid-template-columns: 1fr; gap: 0; }
+    .skills { grid-template-columns: 1fr; gap: 2px; }
+    .skills dd { margin-bottom: 10px; }
+    .bar nav { display: none; }
+  }
+</style>
 </head>
-
 <body>
-<div class="shell">
-    <header>
-        <div class="id-block">
-            <h1>Shucheng Gong</h1>
-            <p class="tagline">
-                Electrical & Computer Engineering · Hardware / IC Design · Mixed-Signal Systems
-            </p>
-            <div class="meta-line">
-                FPGA · PCB · BCI acquisition · Verification-first mindset
-            </div>
+<div class="wrap">
+
+  <header class="bar">
+    <span>sg</span>
+    <nav>
+      <a href="#research">research</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="theme-btn" type="button" data-theme-toggle aria-label="Change color theme">auto</button>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>Shucheng Gong</h1>
+      <p class="lede">
+        Engineering Science (ECE) at the <strong>University of Toronto</strong>.
+        I design hardware from <strong>transistors to processors</strong>: neural-interface
+        circuits and boards, mixed-signal verification, and accelerators for quantized inference.
+      </p>
+      <div class="links">
+        <a class="chip primary" href="mailto:shucheng.gong@mail.utoronto.ca">Email</a>
+        <a class="chip" href="https://github.com/lvcidnu11">GitHub</a>
+        <a class="chip" href="https://www.linkedin.com/in/shucheng-gong-84b99521a/">LinkedIn</a>
+        <a class="chip" href="https://doi.org/10.1109/ISSCC49661.2025.10904733">ISSCC 2025</a>
+      </div>
+    </div>
+    <div class="array-box" aria-hidden="true">
+      <div class="array" id="array"></div>
+      <div class="array-cap">8×8 systolic wavefront</div>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><b>Publication</b><span>Co-author, ISSCC 2025 neural-interface IC</span></div>
+    <div class="fact"><b>Industry</b><span>Hardware Design Intern, Movellus</span></div>
+    <div class="fact"><b>Research</b><span>Research Assistant, UofT ISML</span></div>
+  </div>
+
+  <section id="research">
+    <h2>Research &amp; publications</h2>
+
+    <div class="pub">
+      <div class="venue">IEEE ISSCC 2025 · pp. 274–276</div>
+      <h3>Event-Based Spatially Zooming Neural Interface IC with 10nW/Input Reconfigurable-Inverter Fabric and Input-Adaptive Quantization</h3>
+      <div class="authors">J. Xu, M. A. Kanchwala, M. Abdolrazzaghi, … <b>S. Gong</b>, …, T. A. Valiante, R. Genov</div>
+      <div class="small" style="margin-top:8px"><a href="https://doi.org/10.1109/ISSCC49661.2025.10904733">doi:10.1109/ISSCC49661.2025.10904733</a></div>
+    </div>
+
+    <div class="entry">
+      <div class="when">2024 — now</div>
+      <div>
+        <h3>Neural-interface hardware, UofT ISML</h3>
+        <div class="role">Research Assistant · Prof. Roman Genov's group</div>
+        <ul class="tight">
+          <li>Designed a high-speed chip-on-board acquisition PCB for a brain–computer interface, focused on board-level noise and signal integrity.</li>
+          <li>Built two flexible-PCB revisions of a 32:1 neural-signal multiplexer (including an Intan RHA2132 version) with Verilog sequencing and FPGA data transfer to SAR/passive ADCs.</li>
+          <li>Contributed transistor-level schematics and custom layout to a TSMC 65&nbsp;nm mixed-signal ASIC: non-overlapping clock generator, NAND and shift-register cells, DRC/LVS/PEX.</li>
+          <li>First-author manuscript in preparation on low-noise sampling for neural recording.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="when">2026 — now</div>
+      <div>
+        <h3>Undergraduate thesis: integrated sensing &amp; communications</h3>
+        <div class="role">Supervisor: Prof. Raviraj Adve</div>
+        <p class="small muted">Radar–communication coexistence: how waveform, propagation and receiver-processing assumptions shape detection, estimation and rate.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="entry">
+      <div class="when">May 2025 — now</div>
+      <div>
+        <h3>Movellus</h3>
+        <div class="role">Hardware Design Intern</div>
+        <ul class="tight">
+          <li>AVSBus and PMBus controller RTL, with self-checking testbenches, assertions and coverage written from the spec before RTL.</li>
+          <li>Packaged AVSBus as Vivado IP and brought it up end to end on an Arty Z7-20 FPGA.</li>
+          <li>Closed CDC/RDC findings with VC SpyGlass; built Xcelium/VCS mixed-signal co-simulation for a droop-detector pipeline.</li>
+          <li>Python regression automation for simulation, lint and CDC/RDC flows, cutting manual QA work by more than half.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="when">Summer 2023</div>
+      <div>
+        <h3>Nanjing University</h3>
+        <div class="role">Laboratory Intern · thin-film transistor fabrication (sputtering, CVD)</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Selected projects</h2>
+    <div class="projects">
+
+      <article class="card wide">
+        <div class="tag">Computer architecture · HW/SW co-design</div>
+        <h3><a href="https://github.com/lvcidnu11/Neural_Accelerator">RV64IMC acceleration of W8A8 DeiT-Tiny</a></h3>
+        <p>Bare-metal INT8 vision-transformer inference on RISC-V, with custom <code>qmac8</code>/<code>requant8</code> instructions and an 8×8 matrix-tile extension modelled in Spike. Every run checks 14 stage hashes and all 1,000 output logits against a Python reference.</p>
+        <div class="metrics">
+          <div class="metric"><b>9.12 B</b><span>baseline retired instr.</span></div>
+          <div class="metric"><b>0.83 B</b><span>with qmac8 + requant8</span></div>
+          <div class="metric"><b>0.21 B</b><span>with 8×8 tile engine</span></div>
         </div>
+        <div class="note">Full-inference Spike instruction counts — ISA-level measurements, not hardware speedup.</div>
+        <div class="stack"><span>C</span><span>RISC-V</span><span>Spike</span><span>TFLM</span><span>Python</span></div>
+      </article>
 
-        <button class="theme-toggle" type="button" data-theme-toggle>
-            <span class="theme-dot"></span>
-            <span data-theme-label>Theme: Auto</span>
-        </button>
-    </header>
+      <article class="card">
+        <div class="tag">RTL · accelerator</div>
+        <h3><a href="https://github.com/lvcidnu11/TinyTPU">TinyTPU</a></h3>
+        <p>The RTL for that 8×8 tile: an output-stationary INT8 systolic array with INT32 accumulators, skewed operand feed and per-lane buffers, for reductions up to 1024.</p>
+        <div class="metrics">
+          <div class="metric"><b>64</b><span>MACs / cycle</span></div>
+          <div class="metric"><b>k + 17</b><span>cycles per tile</span></div>
+          <div class="metric"><b>1,807</b><span>self-checks in CI</span></div>
+        </div>
+        <div class="stack"><span>SystemVerilog</span><span>Icarus</span><span>Verilator</span><span>Yosys</span></div>
+      </article>
 
-    <main>
-        <!-- About -->
-        <section>
-            <h2>About</h2>
-            <p>
-                I work at the intersection of digital and analog hardware—FPGAs, high-speed PCBs,
-                and brain-signal acquisition systems. I enjoy turning abstract specs into
-                real, measurable signals on an oscilloscope or logic analyzer.
-            </p>
-            <p>
-                My interests span adaptive voltage scaling, mixed-signal co-simulation,
-                and verification-driven design flows.
-            </p>
-            <div class="pill-row">
-                <span class="pill pill--accent">Hardware Design</span>
-                <span class="pill">FPGA / Verilog</span>
-                <span class="pill">PCB & Flex</span>
-                <span class="pill">BCI Systems</span>
-                <span class="pill">Mixed-Signal</span>
+      <article class="card">
+        <div class="tag">Embedded · data acquisition</div>
+        <h3><a href="https://github.com/lvcidnu11/LTC2500-32-Driver">LTC2500-32 ADC driver</a></h3>
+        <p>FPGA acquisition control for a 32-bit SAR ADC: conversion triggering, busy monitoring, serial capture and digital-filter configuration, with an Ethernet path to the host for capture and post-processing.</p>
+        <div class="stack"><span>SystemVerilog</span><span>FPGA</span><span>Ethernet</span></div>
+      </article>
+
+      <article class="card wide">
+        <div class="split">
+          <div>
+            <div class="tag">Analog IC design</div>
+            <h3><a href="https://github.com/lvcidnu11/analog-mixed-signal-design">Telescopic cascode OTA</a></h3>
+            <p>An eleven-transistor differential amplifier sized with gm/Id, with cascode loads and current-mirror biasing; all devices verified in saturation. Saved AC data and a script to recompute the margins are in the repo.</p>
+            <div class="metrics">
+              <div class="metric"><b>98.9 dB</b><span>DC gain</span></div>
+              <div class="metric"><b>70.9 MHz</b><span>unity-gain freq.</span></div>
+              <div class="metric"><b>68.4°</b><span>phase margin</span></div>
             </div>
-        </section>
+            <div class="note">HSPICE, TT 25&nbsp;°C, 1&nbsp;pF per output. Nominal simulation, not silicon.</div>
+            <div class="stack"><span>HSPICE</span><span>gm/Id</span><span>Python</span></div>
+          </div>
+          <img src="https://raw.githubusercontent.com/lvcidnu11/analog-mixed-signal-design/main/assets/telescopic-ota-bode.png" alt="Bode plot of the telescopic OTA differential AC response" loading="lazy" />
+        </div>
+      </article>
 
-        <!-- Projects -->
-        <section>
-            <h2>Selected Work</h2>
-            <ul class="project-list">
-                <li class="project-card">
-                    <div class="project-title">AVSBus Controller & CDC Closure</div>
-                    <div class="project-meta">Protocol design · CRC-3 · Clock-domain crossing</div>
-                    <div class="project-desc">
-                        Implemented master/slave behavior, command/address phases and verification
-                        strategies for reliable voltage-scaling communication across domains.
-                    </div>
-                </li>
+      <article class="card">
+        <div class="tag">Quantitative research</div>
+        <h3><a href="https://github.com/lvcidnu11/momentum-dca-lab">Momentum DCA Lab</a></h3>
+        <p>Auditable ETF backtests of trend, VIX and Fear &amp; Greed timing against fixed dollar-cost averaging, with fees, lagged signals and every losing outcome kept.</p>
+        <div class="metrics">
+          <div class="metric"><b>0 / 240</b><span>beat plain DCA</span></div>
+          <div class="metric"><b>−35% → −18%</b><span>QQQ max drawdown</span></div>
+        </div>
+        <div class="stack"><span>Python</span><span>backtesting</span></div>
+      </article>
 
-                <li class="project-card">
-                    <div class="project-title">32-Channel BCI Flex PCB</div>
-                    <div class="project-meta">Chip-on-Board · Intan RHA2132 · Signal integrity</div>
-                    <div class="project-desc">
-                        Designed flex PCB and CoB board for neural signal acquisition,
-                        acting as a 32-to-1 mux front-end driven by FPGA logic.
-                    </div>
-                </li>
+      <article class="card">
+        <div class="tag">Digital design</div>
+        <h3><a href="https://github.com/lvcidnu11/8Bit_CPU">8Bit_CPU</a></h3>
+        <p>An FPGA CPU project rebuilt around verification: the address register is checked over every address/command pair, with lint and synthesis in CI. Datapath and ISA are next.</p>
+        <div class="metrics">
+          <div class="metric"><b>36,789</b><span>simulation checks</span></div>
+        </div>
+        <div class="stack"><span>Verilog</span><span>Vivado</span><span>CI</span></div>
+      </article>
 
-                <li class="project-card">
-                    <div class="project-title">FPGA-Driven SAR / Passive ADC</div>
-                    <div class="project-meta">Mixed-signal control · Timing closure</div>
-                    <div class="project-desc">
-                        Prototyped ADC control logic in Verilog, coordinating sampling,
-                        conversion cycles, and digital read-out for lab measurements.
-                    </div>
-                </li>
-            </ul>
-        </section>
+    </div>
+  </section>
 
-        <!-- Contact -->
-        <section>
-            <h2>Contact</h2>
-            <p>Best way to reach me:</p>
-            <ul class="link-list">
-                <li>Email: <a href="mailto:shucheng.gong@mail.utoronto.ca">shucheng.gong@mail.utoronto.ca</a></li>
-                <li>GitHub: <a href="https://github.com/ScGong04" target="_blank">ScGong04</a></li>
-                <li>LinkedIn: <a href="https://www.linkedin.com/in/shucheng-gong-84b99521a/" target="_blank">LinkedIn</a></li>
-            </ul>
-        </section>
-    </main>
+  <section id="skills">
+    <h2>Toolbox</h2>
+    <dl class="skills">
+      <dt>digital &amp; verification</dt><dd>Verilog / SystemVerilog, assertions and coverage, CDC/RDC, RISC-V, FPGA prototyping</dd>
+      <dt>EDA</dt><dd>Cadence Virtuoso, Xcelium, Innovus · Synopsys VCS, VC SpyGlass, HSPICE · Vivado / Vitis</dd>
+      <dt>boards</dt><dd>Altium Designer, flex and chip-on-board PCBs, signal integrity, bring-up</dd>
+      <dt>software</dt><dd>C / C++, Python, MATLAB, bare-metal RISC-V toolchains, Linux, Git</dd>
+    </dl>
+  </section>
 
-    <footer>
-        Last updated · <span id="last-updated"></span>
-    </footer>
+  <footer id="contact">
+    <span><a href="mailto:shucheng.gong@mail.utoronto.ca">shucheng.gong@mail.utoronto.ca</a> · Toronto</span>
+    <span>updated Nov 2026</span>
+  </footer>
+
 </div>
-
 <script>
-    (function () {
-        const root = document.documentElement;
-        const btn = document.querySelector("[data-theme-toggle]");
-        const label = document.querySelector("[data-theme-label]");
-        const modes = ["auto", "light", "dark"];
+  (function () {
+    var array = document.getElementById("array");
+    for (var r = 0; r < 8; r++)
+      for (var c = 0; c < 8; c++) {
+        var cell = document.createElement("span");
+        cell.style.setProperty("--d", r + c);
+        array.appendChild(cell);
+      }
 
-        let current = localStorage.getItem("theme-preference") || "auto";
-
-        function apply(mode) {
-            if (mode === "light") {
-                root.setAttribute("data-theme", "light");
-                label.textContent = "Theme: Light";
-            } else if (mode === "dark") {
-                root.setAttribute("data-theme", "dark");
-                label.textContent = "Theme: Dark";
-            } else {
-                root.removeAttribute("data-theme"); // 使用系统设置
-                label.textContent = "Theme: Auto";
-            }
-        }
-
-        apply(current);
-
-        btn.addEventListener("click", () => {
-            const idx = modes.indexOf(current);
-            current = modes[(idx + 1) % modes.length];
-            localStorage.setItem("theme-preference", current);
-            apply(current);
-        });
-
-        const d = new Date();
-        const pad = (n) => (n < 10 ? "0" + n : n);
-        document.getElementById("last-updated").textContent =
-            d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
-    })();
+    var root = document.documentElement;
+    var btn = document.querySelector("[data-theme-toggle]");
+    var modes = ["auto", "light", "dark"];
+    var current = "auto";
+    try { current = localStorage.getItem("theme-preference") || "auto"; } catch (e) {}
+    function apply(mode) {
+      if (mode === "auto") root.removeAttribute("data-theme");
+      else root.setAttribute("data-theme", mode);
+      btn.textContent = mode;
+    }
+    apply(current);
+    btn.addEventListener("click", function () {
+      current = modes[(modes.indexOf(current) + 1) % modes.length];
+      try { localStorage.setItem("theme-preference", current); } catch (e) {}
+      apply(current);
+    });
+  })();
 </script>
 </body>
 </html>
